@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Laptop & Internet for Students (Beta)</title>
+  <meta name="description" content="Answer four quick questions to find realistic ways to get a free or nearly free laptop and internet as a university student.">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="beta" role="note">
+    <div class="wrap">
+      <span class="beta-tag">Beta</span>
+      <p><strong>Work in progress.</strong> This guide is still being checked and some information may be wrong or out of date. Always confirm details on the programme's official website before you apply.</p>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap">
+      <p class="kicker">GiveInternet.org · Student guide</p>
+      <h1>Get a free (or nearly free) laptop and internet as a university student</h1>
+      <p class="lead">The most realistic route is through your <strong>own university</strong> and your <strong>local community</strong>. Most national and international schemes only serve organisations, citizens on benefits, or school pupils. Answer four quick questions to see what applies to you.</p>
+      <nav class="toc" aria-label="Sections">
+        <a href="#find">Find help</a>
+        <a href="#programmes">All programmes</a>
+        <a href="#templates">Message templates</a>
+        <a href="#scams">Avoid scams</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="find" class="card">
+      <h2>Find what fits you</h2>
+      <form id="quiz">
+        <div class="q">
+          <label class="q-title" for="country">1. Where do you study?</label>
+          <select id="country" name="country" required>
+            <option value="">Choose a country…</option>
+          </select>
+        </div>
+
+        <fieldset class="q">
+          <legend class="q-title">2. Are you an international student?</legend>
+          <p class="hint">That is, you are not a citizen or permanent resident of the country where you study.</p>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="intl" value="yes" required> Yes</label>
+            <label class="choice"><input type="radio" name="intl" value="no"> No</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q">
+          <legend class="q-title">3. Does any of this apply to you? <span class="optional">(tick all that apply, or none)</span></legend>
+          <div class="choices stack">
+            <label class="choice"><input type="checkbox" name="lowIncome"> I have a low income or receive government benefits in the country where I study</label>
+            <label class="choice" id="pell-choice" hidden><input type="checkbox" name="pell"> I receive a US Pell Grant</label>
+            <label class="choice"><input type="checkbox" name="refugee"> I am a refugee or seeking asylum</label>
+            <label class="choice"><input type="checkbox" name="medical"> I am a medical student</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q">
+          <legend class="q-title">4. What do you need?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="need" value="laptop" required> A laptop</label>
+            <label class="choice"><input type="radio" name="need" value="internet"> Internet</label>
+            <label class="choice"><input type="radio" name="need" value="both" checked> Both</label>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn primary">Show my options</button>
+      </form>
+    </section>
+
+    <section id="results" hidden aria-live="polite"></section>
+
+    <section id="programmes">
+      <h2>All programmes</h2>
+      <p class="muted">Every programme we looked at, including the ones that don't help university students. <strong>Apply yourself?</strong> = can you apply on your own. <strong>Int'l students?</strong> = are non-citizen international students eligible. Most government schemes are only for citizens and residents.</p>
+      <div class="filters">
+        <label>Country
+          <select id="f-country"><option value="">All countries</option></select>
+        </label>
+        <label>Type
+          <select id="f-need">
+            <option value="">Laptop or internet</option>
+            <option value="laptop">Laptop</option>
+            <option value="internet">Internet</option>
+          </select>
+        </label>
+        <label>Search
+          <input id="f-search" type="search" placeholder="e.g. medical, refugee, SIM">
+        </label>
+        <label class="check"><input id="f-self" type="checkbox"> I can apply myself</label>
+        <label class="check"><input id="f-intl" type="checkbox"> Not closed to international students</label>
+      </div>
+      <p id="f-count" class="muted small" aria-live="polite"></p>
+      <div id="table"></div>
+      <p class="muted small"><strong>Countries not listed</strong> (e.g. Nigeria, Ghana, Uganda, Rwanda, Philippines, Indonesia, Bangladesh, Mexico, the Middle East): we could not verify any current national scheme that gives laptops to individual university students. Ask your university first; some universities and state/provincial governments run occasional laptop distributions or student-discount schemes.</p>
+    </section>
+
+    <section id="templates">
+      <h2>Message templates</h2>
+      <p class="muted">Copy a template, paste it where you need it, and replace the parts in [square brackets].</p>
+      <div id="template-list"></div>
+    </section>
+
+    <section id="scams" class="card warn">
+      <h2>Avoid scams</h2>
+      <ul>
+        <li><strong>Never pay "shipping", "customs", "processing" or "registration" fees for a "free" laptop.</strong> Genuine programmes don't ask for money via transfer, gift cards or crypto.</li>
+        <li><strong>Fake government laptop schemes are common</strong> — e.g. viral "PM Free Laptop Scheme" messages in India or "free NSFAS laptop" sites in South Africa. Check only official government (.gov / .gov.xx) or university websites.</li>
+        <li><strong>Never share passwords</strong> (e.g. your myNSFAS or student portal login), bank details or copies of your passport with strangers.</li>
+        <li><strong>Ignore social media DMs and "giveaways"</strong> asking you to like, share and send personal details.</li>
+        <li>If someone donates a laptop, <strong>meet in a public place</strong> (e.g. your university campus).</li>
+      </ul>
+    </section>
+
+    <section id="about">
+      <h2>About this guide</h2>
+      <h3>Why GiveInternet can't send you a laptop</h3>
+      <p>GiveInternet.org only provides laptops and internet through vetted local partner organisations, after a long planning process with each partner. We are not able to respond to individual requests, and we know how frustrating that is. This guide lists the routes that individual students can realistically use themselves, starting with the ones most likely to work.</p>
+      <h3>Caveats</h3>
+      <ul>
+        <li>Programme details change often. We checked official pages where possible in late 2026, but confirm eligibility on each website before applying. Each programme shows when it was last checked.</li>
+        <li>Some sources disagree: some websites say a US Pell Grant qualifies you for Lifeline, but official and Congressional sources indicate it only does so for certain survivors; it does qualify you for PCs for People.</li>
+        <li>Tamil Nadu's scheme was launched in January 2026 under one state government; check with your college whether distributions are continuing.</li>
+        <li>Globetops' and Screen Share UK's current activity could not be confirmed.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>A GiveInternet.org guide · Beta · Information last checked late 2026</p>
+    </div>
+  </footer>
+
+  <script src="data/programmes.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
