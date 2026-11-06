@@ -33,12 +33,64 @@ I can provide proof of enrolment and any other documents you need. Thank you ver
 
 Kind regards,
 [Name, programme, email, phone]`
+    },
+    afghan: {
+      title: "Message for Afghan students (to a programme or university)",
+      text:
+`Subject: Question about laptop / internet support for enrolled students
+
+Dear [Programme / International Office / Student Support],
+
+My name is [first name], and I am [applying to / enrolled in] [programme] [inside Afghanistan / as a refugee in (country) / at (university)]. I do not have a reliable laptop or internet connection, and internet access where I live is often interrupted.
+
+Could you please tell me whether:
+
+1. your programme offers laptops, data packages or connectivity support to students, and how to apply;
+2. there is a hardship fund I can apply to as an Afghan [refugee / asylum seeker / international] student;
+3. course materials can be downloaded for offline study, and deadlines can be extended during internet shutdowns?
+
+I can provide proof of enrolment through your official portal. For safety reasons I would be grateful if my name and details are not shared publicly.
+
+Kind regards,
+[First name, programme, official email]`
     }
   };
 
   // ---------- Steps that work in almost any country ----------
 
+  // `for` says who sees a step: "inside" (living in Afghanistan), "afghanAbroad"
+  // (Afghan students elsewhere), "general" (everyone else). Default: everyone
+  // except students inside Afghanistan, for whom campus and public-post advice
+  // doesn't apply or isn't safe.
   const STEPS = [
+    {
+      for: ["inside", "afghanAbroad"],
+      needs: ["laptop", "internet"],
+      title: "Get a place on a programme first, then ask it for a device or data",
+      html: `
+        <p>Almost no programme gives a laptop just for asking. Most laptops and data packages for Afghans go only to people already accepted on a programme. Apply to the programmes below, then ask the coordinator directly whether there is laptop, data or "connectivity support".</p>
+        <p>Intakes are small and irregular, so check their official pages often. <a href="#tpl-afghan">Use the Afghan message template →</a></p>`
+    },
+    {
+      for: ["inside"],
+      needs: ["internet"],
+      title: "Make your data go further",
+      html: `
+        <ul>
+          <li><strong>Choose programmes built for low bandwidth:</strong> SOLAx runs through WhatsApp, and the Digital Citizen Fund degree is designed for slow internet.</li>
+          <li><strong>Download</strong> readings and lectures whenever you have a connection.</li>
+          <li><strong>Use a phone hotspot</strong> with a cheap mobile bundle. Prices change, so check with your operator.</li>
+          <li><strong>Keep mobile data as a fallback.</strong> Fibre is the service most affected by recent orders.</li>
+          <li><strong>Do not buy or use Starlink.</strong> It is illegal in Afghanistan and devices are being seized.</li>
+        </ul>`
+    },
+    {
+      for: ["inside"],
+      needs: ["laptop", "internet"],
+      title: "Study privately and plan for shutdowns",
+      html: `
+        <p>Keep your studies private, and tell your programme coordinator early if you lose access. Share identity documents only on an official programme portal. <a href="#afghan-safety">Read the safety advice →</a></p>`
+    },
     {
       needs: ["laptop", "internet"],
       title: "Ask your own university",
@@ -62,6 +114,7 @@ Kind regards,
           <li><strong>eduroam:</strong> if your university is part of eduroam, your university login gives you free Wi-Fi on campus and at eduroam locations in over 100 countries. <a href="https://eduroam.org" target="_blank" rel="noopener">eduroam.org</a></li>
           <li><strong>Campus, library and public Wi-Fi:</strong> public libraries, municipal Wi-Fi and EU WiFi4EU hotspots in many European towns are free. <a href="https://wifi4eu.ec.europa.eu" target="_blank" rel="noopener">WiFi4EU</a></li>
           <li><strong>A phone hotspot:</strong> if you have a smartphone, a cheap prepaid data bundle shared to an old laptop is often the cheapest home connection.</li>
+          <li data-refugee><strong>Refugees:</strong> some UNHCR-supported community connectivity centres offer free or low-cost Wi-Fi. Ask your local UNHCR office or partner. All UNHCR services are free.</li>
           <li><strong>Low-income internet schemes</strong> are listed below if any match your answers. They usually require residency and/or a low income.</li>
         </ul>`
     },
@@ -79,6 +132,7 @@ Kind regards,
         <div class="tpl-inline" data-template="wanted"></div>`
     },
     {
+      for: ["inside", "afghanAbroad", "general"],
       needs: ["laptop"],
       title: "Accept an older laptop and make it fast with lightweight Linux",
       html: `
@@ -103,7 +157,14 @@ Kind regards,
 
   const COUNTRY_NOTES = {
     "Bulgaria": `There is no Bulgarian national scheme for individual university students, and Bulgarian donation campaigns mostly serve school pupils. Your best options are: the university library computers and eduroam/campus Wi-Fi; the international students' office and your national/international student association; asking senior students and staff who are upgrading; and Freecycle/Facebook "Wanted" posts in local and expat groups (e.g. Pleven and Sofia).`,
+    "Afghanistan": `Women have been banned from universities in Afghanistan since December 2022, so online study is the only route that needs no travel. Fibre internet is being restricted, so plan for interruptions. Almost everything below is for women and girls. For men inside Afghanistan we found very little: AUAF online and ICCR are the main options, and neither provides a device. None of the programmes that provide a laptop or data has a confirmed open intake right now.`,
+    "Iran": `We could not verify any national scheme in Iran that gives laptops to individual university students. For refugees, UNHCR DAFI is the main funded route. Ask your university about hardship funds and library or lab computers.`,
     "Other": `We could not verify any current national scheme in your country that gives laptops to individual university students. Ask your university first; some universities and state/provincial governments run occasional laptop distributions or student-discount schemes. The steps below work almost anywhere.`
+  };
+
+  // Shown only to Afghan students in that country
+  const AFGHAN_NOTES = {
+    "Pakistan": `Pakistan has frozen or delayed many Afghan student visas. A Pakistan Medical and Dental Council directive dated 1 September 2026 barred new admissions of Afghans to medical and dental programmes and told those already enrolled to return to Afghanistan (reported by Arab News). For refugees with a PoR card, UNHCR DAFI is the main funded route.`
   };
 
   const INTL_LABEL = {
@@ -179,16 +240,25 @@ Kind regards,
 
   // ---------- Matching ----------
 
-  const REQUIRE_KEYS = ["lowIncome", "pell", "refugee", "medical"];
+  const REQUIRE_KEYS = ["lowIncome", "pell", "refugee", "medical", "woman"];
+
+  function inCountry(p, country) {
+    if (p.excludeCountries && p.excludeCountries.includes(country)) return false;
+    return p.countries.includes("*") || p.countries.includes(country);
+  }
 
   function evaluate(p, a) {
-    const inCountry = p.countries.includes("*") || p.countries.includes(a.country);
-    if (!inCountry) return null;
-    if (!p.needs.some(n => a.needs.includes(n))) return null;
+    if (!inCountry(p, a.country)) return null;
+    if (p.afghan === "only" && !a.afghan) return null;
+    if (a.inside && !p.afghan) return null;
+    const studyOnly = p.needs.includes("study");
+    if (!studyOnly && !p.needs.some(n => a.needs.includes(n))) return null;
 
     if (p.blocker) return { group: "no", reason: p.blocker };
     if (a.intl && p.intl === "no") return { group: "no", reason: `Not open to international students (${p.intlText})` };
     if (p.requires && !p.requires.some(r => a[r])) return { group: "no", reason: p.requiresText || "You may not meet the requirements" };
+    if (p.school) return { group: "school" };
+    if (studyOnly) return { group: "study" };
     if (p.individual === "no") return { group: "org" };
     return { group: "try" };
   }
@@ -225,26 +295,38 @@ Kind regards,
     const needLabel = a.needs.length === 2 ? "a laptop and internet" : a.needs[0] === "laptop" ? "a laptop" : "internet";
     const countryLabel = a.country === "Other" ? "a country not listed" : a.country;
 
-    const groups = { try: [], org: [], no: [] };
+    const groups = { try: [], org: [], school: [], study: [], no: [] };
     PROGRAMMES.forEach(p => {
       const r = evaluate(p, a);
       if (r) groups[r.group].push({ p, reason: r.reason });
     });
     Object.values(groups).forEach(g => g.sort((x, y) => sortRank(x.p) - sortRank(y.p)));
 
-    const steps = STEPS.filter(s => s.needs.some(n => a.needs.includes(n)));
-    const note = COUNTRY_NOTES[a.country];
+    const audience = a.inside ? "inside" : a.afghan ? "afghanAbroad" : "general";
+    const steps = STEPS.filter(s =>
+      (s.for || ["afghanAbroad", "general"]).includes(audience) &&
+      s.needs.some(n => a.needs.includes(n)));
+    const notes = [COUNTRY_NOTES[a.country], a.afghan && AFGHAN_NOTES[a.country]].filter(Boolean);
+
+    const summary = a.inside
+      ? `You are in <strong>Afghanistan</strong> and need <strong>${needLabel}</strong>.`
+      : `You study in <strong>${esc(countryLabel)}</strong>, ${a.intl ? "as an <strong>international student</strong>" : "<strong>not</strong> as an international student"}, and need <strong>${needLabel}</strong>.`;
 
     let html = `
       <div class="results-head">
         <h2>Your options</h2>
-        <p class="muted">You study in <strong>${esc(countryLabel)}</strong>, ${a.intl ? "as an <strong>international student</strong>" : "<strong>not</strong> as an international student"}, and need <strong>${needLabel}</strong>. <a href="#find">Change answers</a></p>
+        <p class="muted">${summary} <a href="#find">Change answers</a></p>
       </div>`;
 
-    if (note) html += `<div class="card info"><p>${note}</p></div>`;
+    html += notes.map(n => `<div class="card info"><p>${n}</p></div>`).join("");
 
-    html += `<h3 class="group-title">1. Start with these steps</h3>
-      <p class="muted">Work through them in order. Most students who get a free or near-free laptop get it through the first few.</p>
+    let section = 0;
+    const heading = text => `<h3 class="group-title">${++section}. ${text}</h3>`;
+
+    html += `${heading("Start with these steps")}
+      <p class="muted">${a.afghan
+        ? "Work through them in order. Every route below involves joining a study programme or a local scheme."
+        : "Work through them in order. Most students who get a free or near-free laptop get it through the first few."}</p>
       <ol class="steps">${steps.map(s => `
         <li class="step">
           <h4>${esc(s.title)}${s.badge ? ` <span class="badge">${esc(s.badge)}</span>` : ""}</h4>
@@ -252,15 +334,27 @@ Kind regards,
         </li>`).join("")}
       </ol>`;
 
-    html += `<h3 class="group-title">2. Programmes worth trying</h3>`;
+    html += heading("Programmes worth trying");
     html += groups.try.length
       ? `<div class="prog-list">${groups.try.map(x => programmeCard(x.p, a)).join("")}</div>`
       : `<p class="muted">No specific programme matched your answers. The steps above are your best route.</p>`;
 
     if (groups.org.length) {
-      html += `<h3 class="group-title">3. Ask your university or a local organisation to apply for you</h3>
+      html += `${heading("Ask your university or a local organisation to apply for you")}
         <p class="muted">These only give devices or connectivity to organisations, not to individuals. Show them to your student union or international office.</p>
         <div class="prog-list">${groups.org.map(x => programmeCard(x.p, a)).join("")}</div>`;
+    }
+
+    if (groups.school.length) {
+      html += `${heading("No school-leaving certificate yet? Start here")}
+        <p class="muted">A university needs a school-leaving certificate. These online schools are a realistic first step towards a degree.</p>
+        <div class="prog-list">${groups.school.map(x => programmeCard(x.p, a)).join("")}</div>`;
+    }
+
+    if (groups.study.length) {
+      html += `${heading("Free study and information, with no device or data")}
+        <p class="muted">These won't give you a laptop or internet, but a place on a programme is often what opens up other support.</p>
+        <div class="prog-list">${groups.study.map(x => programmeCard(x.p, a)).join("")}</div>`;
     }
 
     if (groups.no.length) {
@@ -270,12 +364,17 @@ Kind regards,
       </details>`;
     }
 
-    html += `<div class="card warn compact">
+    html += a.afghan
+      ? `<div class="card warn compact">
+      <p><strong>Never pay any fee, and never send passport or Tazkira scans to WhatsApp "agents".</strong> Use only official programme websites. <a href="#afghan-safety">Safety advice for Afghan students →</a></p>
+    </div>`
+      : `<div class="card warn compact">
       <p><strong>Never pay any fee for a "free" laptop</strong>, and check that websites are official (.gov or your university). <a href="#scams">More scam warnings →</a></p>
     </div>`;
 
     out.innerHTML = html;
     if (!a.medical) out.querySelectorAll("[data-medical]").forEach(el => el.remove());
+    if (!a.refugee) out.querySelectorAll("[data-refugee]").forEach(el => el.remove());
     out.querySelectorAll(".tpl-inline").forEach(el => { el.innerHTML = templateHtml(el.dataset.template, false); });
     out.hidden = false;
     out.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -289,12 +388,14 @@ Kind regards,
     const q = $("#f-search").value.trim().toLowerCase();
     const self = $("#f-self").checked;
     const intl = $("#f-intl").checked;
+    const afghan = $("#f-afghan").checked;
 
     const rows = PROGRAMMES.filter(p => {
-      if (country && !(p.countries.includes(country) || p.countries.includes("*"))) return false;
+      if (country && !inCountry(p, country)) return false;
       if (need && !p.needs.includes(need)) return false;
       if (self && p.individual === "no") return false;
       if (intl && p.intl === "no") return false;
+      if (afghan && !p.afghan) return false;
       if (q) {
         const hay = [p.name, p.where, p.who, p.cost, p.intlText, p.individualText, p.blocker || ""].join(" ").toLowerCase();
         if (!hay.includes(q)) return false;
@@ -340,26 +441,46 @@ Kind regards,
       `<option value="Other">Another country</option>`);
     $("#f-country").insertAdjacentHTML("beforeend", list.map(c => `<option>${esc(c)}</option>`).join(""));
 
-    countrySel.addEventListener("change", () => {
+    // Show or hide the questions that depend on other answers
+    function updateQuiz() {
       const us = countrySel.value === "United States";
+      const inside = countrySel.value === "Afghanistan";
+      const afghanInput = $("#afghan-choice input");
+
       $("#pell-choice").hidden = !us;
       if (!us) $("#pell-choice input").checked = false;
-    });
+
+      // Studying online from inside Afghanistan: "international student" doesn't apply
+      $("#intl-q").hidden = inside;
+      $("#intl-q input").required = !inside;
+
+      $("#afghan-choice").hidden = inside;
+      if (inside) afghanInput.checked = false;
+
+      const afghan = inside || afghanInput.checked;
+      $("#woman-choice").hidden = !afghan;
+      if (!afghan) $("#woman-choice input").checked = false;
+    }
+    countrySel.addEventListener("change", updateQuiz);
+    $("#afghan-choice input").addEventListener("change", updateQuiz);
 
     $("#quiz").addEventListener("submit", e => {
       e.preventDefault();
       const f = e.target;
       const need = f.need.value;
+      const inside = f.country.value === "Afghanistan";
       const a = {
         country: f.country.value,
-        intl: f.intl.value === "yes",
+        inside,
+        afghan: inside || f.afghan.checked,
+        intl: !inside && f.intl.value === "yes",
         needs: need === "both" ? ["laptop", "internet"] : [need]
       };
       REQUIRE_KEYS.forEach(k => { a[k] = f[k].checked; });
       renderResults(a);
     });
 
-    ["#f-country", "#f-need", "#f-self", "#f-intl"].forEach(s => $(s).addEventListener("change", renderTable));
+    ["#f-country", "#f-need", "#f-self", "#f-intl", "#f-afghan"].forEach(s => $(s).addEventListener("change", renderTable));
     $("#f-search").addEventListener("input", renderTable);
     renderTable();
 

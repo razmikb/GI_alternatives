@@ -7,14 +7,20 @@
   Fields
     countries   where you must be studying: country names as shown in the
                 questionnaire, or "*" for anywhere
-    needs       "laptop", "internet" (grants that can pay for a laptop count as "laptop")
+    excludeCountries  optional: countries where a "*" programme does not apply
+    needs       "laptop", "internet" (grants that can pay for a laptop count as "laptop"),
+                or "study" (free study with no device or data; listed separately)
     individual  "yes"  = students apply themselves
                 "via"  = students apply through a local hub, partner or their college
                 "no"   = only organisations can apply (shown under "ask your university")
     intl        is it open to international (non-citizen) students?
                 "yes" | "notExcluded" | "check" | "unlikely" | "no"
     requires    optional: the student must have at least ONE of these
-                "lowIncome" | "pell" | "refugee" | "medical"
+                "lowIncome" | "pell" | "refugee" | "medical" | "woman"
+    afghan      optional: "only" = shown only to Afghan students
+                "also" = open to everyone and relevant to Afghans
+                (students in Afghanistan only see programmes with this field)
+    school      optional: true = school level, not university; listed separately
     blocker     optional: a reason this does not help university students right now
                 (closed, paused, school pupils only...). Always shown as "probably not for you".
     warning     optional: a caution shown on the card
@@ -22,6 +28,8 @@
 window.PROGRAMMES = [
   {
     id: "university",
+    afghan: "also",
+    excludeCountries: ["Afghanistan"],
     name: "Your university's hardship fund / laptop loans",
     where: "Worldwide",
     countries: ["*"],
@@ -42,6 +50,7 @@ window.PROGRAMMES = [
   },
   {
     id: "tech-takeback",
+    afghan: "also",
     name: "Tech-Takeback Foundation — Laptops For All",
     where: "United Kingdom",
     countries: ["United Kingdom"],
@@ -58,6 +67,7 @@ window.PROGRAMMES = [
   },
   {
     id: "national-databank",
+    afghan: "also",
     name: "National Databank (Good Things Foundation)",
     where: "United Kingdom",
     countries: ["United Kingdom"],
@@ -154,6 +164,7 @@ window.PROGRAMMES = [
   },
   {
     id: "computertruhe",
+    afghan: "also",
     name: "Computertruhe e.V.",
     where: "Germany",
     countries: ["Germany"],
@@ -210,6 +221,7 @@ window.PROGRAMMES = [
   },
   {
     id: "pcs-for-people",
+    afghan: "also",
     name: "PCs for People",
     where: "United States",
     countries: ["United States"],
@@ -246,6 +258,7 @@ window.PROGRAMMES = [
   },
   {
     id: "lifeline",
+    afghan: "also",
     name: "Lifeline (FCC)",
     where: "United States",
     countries: ["United States"],
@@ -537,11 +550,13 @@ window.PROGRAMMES = [
   },
   {
     id: "dafi",
+    afghan: "also",
     name: "UNHCR DAFI scholarship",
     where: "Refugees, many countries",
     countries: ["*"],
     needs: ["laptop"],
-    who: "Recognised refugees in DAFI countries; covers \"study materials\" (no specific laptop)",
+    excludeCountries: ["Afghanistan", "Iran", "Pakistan"],
+    who: "Refugees registered in a DAFI country (e.g. Türkiye, Central Asia); only one family member; not those confirmed for resettlement. Covers \"study materials\"; a laptop or data only in some countries (e.g. South Africa), and UNHCR's evaluation found the stipend often too small for IT and internet",
     individual: "yes",
     individualText: "Yes",
     intl: "yes",
@@ -552,39 +567,49 @@ window.PROGRAMMES = [
     url: "https://www.unhcr.org/my/what-we-do/build-better-futures/education/tertiary-education/dafi-tertiary-scholarship-programme",
     sources: [
       { title: "DAFI scholarship programme FAQs", url: "https://services.unhcr.org/opportunities/frequently-asked-questions/dafi-scholarship-programme-faqs" },
-      { title: "DAFI tertiary scholarship programme", url: "https://www.unhcr.org/my/what-we-do/build-better-futures/education/tertiary-education/dafi-tertiary-scholarship-programme" }
+      { title: "DAFI tertiary scholarship programme", url: "https://www.unhcr.org/my/what-we-do/build-better-futures/education/tertiary-education/dafi-tertiary-scholarship-programme" },
+      { title: "DAFI: relevance, effectiveness, impact (UNHCR evaluation)", url: "https://www.unhcr.org/sites/default/files/legacy-pdf/62dfc7d34.pdf" },
+      { title: "DAFI in South Africa (Study Trust)", url: "https://studytrust.org.za/dafi-scholarship/" }
     ],
-    checked: "Late 2026"
+    checked: "Nov 2026"
   },
   {
     id: "article-26",
+    afghan: "also",
     name: "Article 26 scholarships",
     where: "United Kingdom (refugees/asylum seekers)",
     countries: ["United Kingdom"],
     needs: ["laptop"],
-    who: "People seeking asylum who can't get student finance; some awards include equipment money",
+    who: "People seeking asylum who can't get student finance; at some universities also refugees or Afghans with ARAP/ACRS leave (e.g. Leeds)",
     individual: "yes",
     individualText: "Yes, per university",
     intl: "yes",
     intlText: "Yes (asylum seekers)",
     requires: ["refugee"],
     requiresText: "For people seeking asylum",
-    cost: "Free",
+    cost: "Free fees plus living support that can pay for a laptop — e.g. Leeds £10,000 a year towards study costs, De Montfort up to £3,500 a year, Kent £2,000 bursary",
     url: "https://www.refugee-study.co.uk/Refugee-university-scholarships-directory-D-I.php",
     urlText: "Scholarship directory",
+    warning: "Most 2026/27 rounds have closed (e.g. Greenwich 30 Apr, Kent 19 Jun, Nottingham 1 Jul 2026). Greenwich's 2027/28 round opens at the end of January 2027.",
     sources: [
       { title: "Scholarships for people seeking asylum, D–H", url: "https://www.refugee-study.co.uk/Refugee-university-scholarships-directory-D-I.php" },
-      { title: "Scholarships for people seeking asylum, K–N", url: "https://www.refugee-study.co.uk/Refugee-university-scholarships-directory-K-N.php" }
+      { title: "Scholarships for people seeking asylum, K–N", url: "https://www.refugee-study.co.uk/Refugee-university-scholarships-directory-K-N.php" },
+      { title: "Leeds — Sanctuary Scholarship", url: "https://www.leeds.ac.uk/masters-scholarships-bursaries/doc/sanctuary-scholarship" },
+      { title: "Greenwich — Sanctuary Scholarship", url: "https://www.gre.ac.uk/bursaries/the-sanctuary-scholarship" },
+      { title: "Kent — Article 26 Sanctuary Scholarships", url: "https://www.kent.ac.uk/scholarships/sanctuary-scholarships" },
+      { title: "De Montfort — Article 26 Scholarship", url: "https://www.dmu.ac.uk/current-students/student-support/adjusting-to-student-life/transitions/article-26-scholarship.aspx" },
+      { title: "Nottingham — WH Revis Article 26 Scholarship", url: "https://www.nottingham.ac.uk/studywithus/ugstudy/articles/scholarships-and-bursaries-ug/scholarships/funding-for-refugees-and-asylum-seekers/wh-revis-article-26-scholarship.html" }
     ],
-    checked: "Late 2026"
+    checked: "Nov 2026"
   },
   {
     id: "kiron",
-    name: "Kiron",
+    afghan: "also",
+    name: "Kiron Campus",
     where: "Refugees (online)",
     countries: ["*"],
     needs: ["laptop"],
-    who: "Free online courses; no laptops",
+    who: "Free online courses for refugees and displaced learners; no laptops. Full access requires status verification, and learners inside Afghanistan only get places in rounds where Afghanistan is selected. Kiron's separate THRIVE Afghanistan programme is listed on its own",
     individual: "yes",
     individualText: "Yes",
     intl: "yes",
@@ -592,8 +617,11 @@ window.PROGRAMMES = [
     blocker: "Free online courses only — no laptops",
     cost: "Free courses only",
     url: "https://www.kiron.ngo",
-    sources: [{ title: "Kiron — FAQ", url: "https://www.kiron.ngo/faq" }],
-    checked: "Late 2026"
+    sources: [
+      { title: "Kiron — FAQ", url: "https://www.kiron.ngo/faq" },
+      { title: "Am I eligible to access Kiron?", url: "https://support.kiron.ngo/hc/en-us/articles/15601759117596-Am-I-eligible-to-access-Kiron" }
+    ],
+    checked: "Nov 2026"
   },
   {
     id: "jusoor",
@@ -660,5 +688,413 @@ window.PROGRAMMES = [
     url: "https://www.labdoo.org",
     sources: [{ title: "Labdoo Deutschland", url: "https://www.labdoo.org/deu/en/" }],
     checked: "Late 2026"
+  },
+
+  // ---------- Afghan students: programmes that provide a device or data ----------
+  {
+    id: "codeweekend",
+    afghan: "only",
+    name: "CodeWeekend — Web & AI Bootcamp",
+    where: "Online (non-profit in British Columbia, Canada; founded in Kabul)",
+    countries: ["Afghanistan"],
+    needs: ["laptop", "internet"],
+    who: "Women and girls in Afghanistan; 12-week bootcamp (2026: 476 applied, 50 admitted)",
+    individual: "yes",
+    individualText: "Yes — online form when a cohort opens",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For women and girls in Afghanistan",
+    cost: "Free — full scholarships, internet packages and laptop support available",
+    url: "https://codeweekend.net/programs/",
+    warning: "The 2026 cohort ended on 27 Aug 2026 and the next intake has not been announced. Check the page often.",
+    sources: [
+      { title: "CodeWeekend — programs", url: "https://codeweekend.net/programs/" },
+      { title: "CodeWeekend — home", url: "https://codeweekend.net/" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "kiron-thrive",
+    afghan: "only",
+    name: "Kiron — THRIVE Afghanistan",
+    where: "Online (Berlin)",
+    countries: ["Afghanistan"],
+    needs: ["laptop", "internet"],
+    who: "Women aged 18–45 living in Afghanistan; English level B1; 9 months",
+    individual: "yes",
+    individualText: "Yes, when a cohort opens",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For women living in Afghanistan",
+    cost: "Free — per Kiron's 2024 annual report, participants received laptops, solar chargers, headsets and monthly internet packages",
+    url: "https://www.kiron.ngo/programs-at-kiron",
+    warning: "A 2026/27 cohort is not confirmed, and neither is whether devices are still provided. Ask before you rely on this.",
+    sources: [
+      { title: "Kiron — our learning programs", url: "https://www.kiron.ngo/programs-at-kiron" },
+      { title: "Kiron annual report 2024", url: "https://cdn.prod.website-files.com/640074ee60e1402bba5f3b35/6980ab5cf34109f57bbfa0bb_081e98a18cd465e329731621087d7866_2025-10-annual-report-kiron-24-en.pdf" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "aseel-women-in-tech",
+    afghan: "only",
+    name: "Aseel — 50 Afghan Women in Tech fellowship",
+    where: "Online",
+    countries: ["*"],
+    needs: ["laptop", "internet"],
+    who: "Afghan women; English proficiency required on the application form",
+    individual: "yes",
+    individualText: "Yes — aseelapp.com/apply",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For Afghan women",
+    cost: "Per fellow: $800 for a computer and accessories, $600 internet support, $6,000 yearly stipend",
+    url: "https://aseelapp.com/grand-challenges/50-women-in-tech",
+    warning: "Current deadline and status are not verified. Check the official page before applying.",
+    sources: [
+      { title: "Aseel — Women in Tech", url: "https://aseelapp.com/grand-challenges/50-women-in-tech" },
+      { title: "Aseel — apply", url: "https://aseelapp.com/apply" }
+    ],
+    checked: "Nov 2026"
+  },
+
+  // ---------- Refugees in host countries ----------
+  {
+    id: "dafi-iran",
+    afghan: "also",
+    name: "UNHCR DAFI — Iran",
+    where: "Iran",
+    countries: ["Iran"],
+    needs: ["laptop"],
+    who: "Bachelor's students in their 1st–3rd semester; the student or head of household holds a valid Amayesh card; GPA above 15; no family member has had DAFI before. Call published 13 Oct 2026",
+    individual: "yes",
+    individualText: "Yes, through International Farda Development Activists (IFDA); see the UNHCR call",
+    intl: "yes",
+    intlText: "Refugees only",
+    requires: ["refugee"],
+    requiresText: "For refugees holding an Amayesh card",
+    cost: "Scholarship (tuition and allowance); a laptop or data allowance is not confirmed",
+    url: "https://help.unhcr.org/iran/en/2026/10/13/call-for-applications-dafi/",
+    urlText: "UNHCR Iran — DAFI call",
+    warning: "We could not load the full call, so confirm the details with IFDA. UNHCR never charges for applications.",
+    sources: [{ title: "Call for Applications — DAFI (UNHCR Iran)", url: "https://help.unhcr.org/iran/en/2026/10/13/call-for-applications-dafi/" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "dafi-pakistan",
+    afghan: "also",
+    name: "UNHCR DAFI — Pakistan",
+    where: "Pakistan",
+    countries: ["Pakistan"],
+    needs: ["laptop"],
+    who: "Registered Afghan refugees with a valid PoR card at HEC-recognised universities or colleges, run with Inspire Pakistan. Recent undergraduate calls were open to female Afghan refugees and non-Afghan refugees; renewable for up to 4 years",
+    individual: "yes",
+    individualText: "Yes — online platform or DAFI offices",
+    intl: "yes",
+    intlText: "Refugees only; Pakistani students are not eligible",
+    requires: ["refugee"],
+    requiresText: "For refugees with a valid PoR card",
+    cost: "Tuition, books and travel; no laptop listed",
+    url: "https://www.unhcr.org/pk/dafi-scholarships",
+    sources: [
+      { title: "DAFI scholarships (UNHCR Pakistan)", url: "https://www.unhcr.org/pk/dafi-scholarships" },
+      { title: "DAFI application platform", url: "https://unhcr-dafi-tertiary.scholarshipsplatform.com/" },
+      { title: "DAFI scholarship for refugees in Pakistan (Kabul Scholarship)", url: "https://kabulscholarship.com/opportunity/unhcr-and-dafi-scholarship-for-refugees-in-pakistan/" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "unhcr-pk-solutions",
+    afghan: "also",
+    name: "UNHCR Pakistan — Third Country Solutions",
+    where: "Pakistan",
+    countries: ["Pakistan"],
+    needs: ["study"],
+    who: "Refugees and asylum seekers; UNHCR shares verified education and scholarship pathways",
+    individual: "yes",
+    individualText: "Information only",
+    intl: "yes",
+    intlText: "Yes",
+    requires: ["refugee"],
+    requiresText: "For refugees and asylum seekers",
+    cost: "Free (all UNHCR services are free)",
+    url: "https://help.unhcr.org/pakistan/third-country-solutions/",
+    sources: [{ title: "Third Country Solutions — UNHCR Pakistan", url: "https://help.unhcr.org/pakistan/third-country-solutions/" }],
+    checked: "Nov 2026"
+  },
+
+  // ---------- Resettled refugees ----------
+  {
+    id: "refurbish-for-refugees",
+    afghan: "also",
+    name: "Refurbish for Refugees (Bellevue di Monaco)",
+    where: "Munich, Germany",
+    countries: ["Germany"],
+    needs: ["laptop"],
+    who: "People with a refugee background; free repair café on the 1st and 3rd Thursday, 18:00–20:00",
+    individual: "yes",
+    individualText: "Yes — laptop@bellevuedimonaco.de",
+    intl: "yes",
+    intlText: "Yes (refugees)",
+    requires: ["refugee"],
+    requiresText: "For people with a refugee background",
+    cost: "Free refurbished laptops (when available) and free repairs",
+    url: "https://www.freiwilligenzentren-muenchen.de/projekt/refurbish-refugees-laptops-gefluechtete",
+    warning: "Laptop stock varies.",
+    sources: [
+      { title: "Refurbish for Refugees — Laptops für Geflüchtete", url: "https://www.freiwilligenzentren-muenchen.de/projekt/refurbish-refugees-laptops-gefluechtete" },
+      { title: "Repair Café Refurbish for Refugees", url: "https://willkommen-in-muenchen.de/laptoptablet-spende-wir-sammeln-laptops-fuer-gefluechtete-schuelerstudentinnen" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "canadian-connections",
+    afghan: "also",
+    name: "Canadian Connections — Digital Access Project",
+    where: "Canada",
+    countries: ["Canada"],
+    needs: ["laptop"],
+    who: "Newcomer refugees; laptops given in the first weeks after arrival",
+    individual: "via",
+    individualText: "Via the organisation",
+    intl: "yes",
+    intlText: "Refugees",
+    requires: ["refugee"],
+    requiresText: "For newcomer refugees",
+    cost: "Free",
+    url: "https://canadianconnections.org/digital-access-program/",
+    warning: "Current activity could not be confirmed.",
+    sources: [{ title: "Digital Access Program — Canadian Connections", url: "https://canadianconnections.org/digital-access-program/" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "ircc-services",
+    afghan: "also",
+    name: "IRCC-funded settlement services and public libraries",
+    where: "Canada",
+    countries: ["Canada"],
+    needs: ["internet"],
+    who: "Permanent residents including resettled refugees, protected persons and some other pathways",
+    individual: "yes",
+    individualText: "Yes",
+    intl: "check",
+    intlText: "Only with an eligible status",
+    cost: "Free help, library computers and Wi-Fi",
+    url: "https://ircc.canada.ca/english/newcomers/services/index.asp",
+    sources: [{ title: "Find free newcomer services near you (IRCC)", url: "https://ircc.canada.ca/english/newcomers/services/index.asp" }],
+    checked: "Nov 2026"
+  },
+
+  // ---------- Afghan students: school level (first step towards a degree) ----------
+  {
+    id: "alekain",
+    afghan: "only",
+    school: true,
+    name: "Alekain Foundation (high school)",
+    where: "Online (US)",
+    countries: ["Afghanistan"],
+    needs: ["laptop", "internet"],
+    who: "Girls aged 16+ living in Afghanistan; online interview; English required",
+    individual: "yes",
+    individualText: "Yes — Get Involved page",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For girls living in Afghanistan",
+    cost: "Free accredited online high-school diploma, plus a laptop and a monthly internet package",
+    url: "https://alekainfoundation.org/get-involved/",
+    sources: [
+      { title: "Alekain Foundation — get involved", url: "https://alekainfoundation.org/get-involved/" },
+      { title: "Alekain Foundation — about", url: "https://alekainfoundation.org/about/" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "nsde",
+    afghan: "only",
+    school: true,
+    name: "NSDE Foundation (high school)",
+    where: "Online (Netherlands)",
+    countries: ["*"],
+    needs: ["laptop"],
+    who: "Girls 13+ in Afghanistan, or refugees in neighbouring countries",
+    individual: "yes",
+    individualText: "Contact contact@nsdefoundation.org",
+    intl: "yes",
+    intlText: "Yes (refugees in neighbouring countries)",
+    requires: ["woman"],
+    requiresText: "For Afghan girls",
+    cost: "Free; technology support \"where funding allows\"",
+    url: "https://nsdefoundation.org/project/online-school-for-afghan-girls/",
+    sources: [{ title: "Online School for Afghan Girls — NSDE", url: "https://nsdefoundation.org/project/online-school-for-afghan-girls/" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "solax",
+    afghan: "only",
+    school: true,
+    name: "SOLAx (grades 6–12)",
+    where: "Online, through WhatsApp",
+    countries: ["*"],
+    needs: ["study"],
+    who: "Afghan girls anywhere, grades 6–12 (Afghan national curriculum); English, Pashto and Dari",
+    individual: "yes",
+    individualText: "Yes",
+    intl: "yes",
+    intlText: "Yes (Afghan girls anywhere)",
+    requires: ["woman"],
+    requiresText: "For Afghan girls",
+    cost: "Free; works on a phone with low data, but no device or data is provided",
+    url: "https://www.sola-afghanistan.org",
+    sources: [
+      { title: "SOLA", url: "https://www.sola-afghanistan.org" },
+      { title: "SOLAx makes free online education possible (8am Media)", url: "https://8am.media/eng/knowledge-without-borders-solax-makes-free-online-education-possible-for-girls-of-afghanistan/" }
+    ],
+    checked: "Nov 2026"
+  },
+
+  // ---------- Afghan students: free study, no device or data ----------
+  {
+    id: "uopeople-afghan",
+    afghan: "only",
+    name: "University of the People — Afghan Women's Scholarship Fund",
+    where: "Online (US)",
+    countries: ["Afghanistan"],
+    needs: ["study"],
+    who: "Women in Afghanistan who meet admission rules; taught in English; rolling admission",
+    individual: "yes",
+    individualText: "Yes — normal application, no separate scholarship form",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For women in Afghanistan",
+    cost: "Free tuition and fees; no laptop or internet",
+    url: "https://www.uopeople.edu/tuition-free/scholarships/afghan-womens-scholarship-fund/",
+    sources: [{ title: "Afghan Women's Scholarship Fund — UoPeople", url: "https://www.uopeople.edu/tuition-free/scholarships/afghan-womens-scholarship-fund/" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "dcf-saint-peters",
+    afghan: "only",
+    name: "Digital Citizen Fund + Saint Peter's University — online associate degree",
+    where: "Online (US)",
+    countries: ["Afghanistan"],
+    needs: ["study"],
+    who: "25 women living inside Afghanistan; no high-school transcript required; classes begin 19 Jan 2027",
+    individual: "no",
+    individualText: "No — the Digital Citizen Fund recruits and verifies candidates through its networks",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For women living in Afghanistan",
+    cost: "Free; designed for slow, unreliable internet; no device mentioned",
+    url: "https://digitalcitizenfund.org/",
+    warning: "Announced by press release on 5 Nov 2026 and not yet confirmed on the fund's own site.",
+    sources: [{ title: "DCF and Saint Peter's University press release", url: "https://www.einpresswire.com/article/954597632/dcf-and-saint-peter-s-university-launch-u-s-degree-for-women-in-afghanistan" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "online-zan",
+    afghan: "only",
+    name: "Online Zan (Women's) University",
+    where: "Online",
+    countries: ["*"],
+    needs: ["study"],
+    who: "Afghan women; officials report more than 20,000 students across 16 disciplines",
+    individual: "yes",
+    individualText: "Yes",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For Afghan women",
+    cost: "Almost free of charge; no device or data support",
+    url: null,
+    urlText: "Official site not located",
+    warning: "Known from news reports only. Be careful with any site claiming to be this university, and never pay an agent.",
+    sources: [{ title: "Online university throws a lifeline to Afghan women (IPS)", url: "https://www.ipsnews.net/2026/04/online-university-throws-a-lifeline-to-afghan-women-shut-out-of-education/" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "auaf-online",
+    afghan: "only",
+    name: "American University of Afghanistan (AUAF) online",
+    where: "Online (Doha-based)",
+    countries: ["*"],
+    needs: ["study"],
+    who: "Afghan men and women; about 1,000 enrolled, about 75% women; very competitive (more than 21,000 applications for 281 undergraduate places in 2025)",
+    individual: "yes",
+    individualText: "Yes",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    cost: "Scholarships; no device or data support verified",
+    url: null,
+    urlText: "Search for AUAF's official website",
+    warning: "A $25 million US grant was rejected in Oct 2026 and US funding is due to end by the end of 2026, so its future is uncertain.",
+    sources: [
+      { title: "The forgotten 20 million (Nature)", url: "https://www.nature.com/articles/d41586-026-02454-z" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "iccr-online",
+    afghan: "only",
+    name: "ICCR online scholarships (India)",
+    where: "Online, 9 Indian universities",
+    countries: ["*"],
+    needs: ["study"],
+    who: "Afghan nationals aged 18–35; next round expected mid-2027, not yet announced",
+    individual: "yes",
+    individualText: "Yes, when the round opens",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    cost: "Tuition only; no stipend or device",
+    url: null,
+    urlText: "Official ICCR portal (Government of India)",
+    sources: [
+      { title: "India offers 1000 online scholarships for Afghan students", url: "https://www.newkerala.com/news/o/india-announces-1000-online-scholarships-afghan-students-special-scheme-781" },
+      { title: "Scholarships for Afghan students 2027 (Khaama Press)", url: "https://www.khaama.com/scholarships-afghan-students-2027-guide/" }
+    ],
+    checked: "Nov 2026"
+  },
+  {
+    id: "afghan-geeks",
+    afghan: "only",
+    name: "Afghan Geeks Education",
+    where: "Online (registered in Greece)",
+    countries: ["*"],
+    needs: ["study"],
+    who: "Afghan women; free Frontend Web Development course open; AI and Backend \"coming soon\"",
+    individual: "yes",
+    individualText: "Yes (\"Apply to join\")",
+    intl: "yes",
+    intlText: "Afghans are the target group",
+    requires: ["woman"],
+    requiresText: "For Afghan women",
+    cost: "Free course; paid internships for a few graduates; no device or data",
+    url: "https://www.afghangeeksedu.org/en",
+    sources: [{ title: "Afghan Geeks Education", url: "https://www.afghangeeksedu.org/en" }],
+    checked: "Nov 2026"
+  },
+  {
+    id: "shecodes",
+    afghan: "only",
+    name: "SheCodes Foundation",
+    where: "Online",
+    countries: ["*"],
+    needs: ["study"],
+    who: "Women in developing countries including Afghanistan; workshops of about 6 weeks; you must already have a computer and internet",
+    individual: "yes",
+    individualText: "Yes",
+    intl: "yes",
+    intlText: "Yes",
+    requires: ["woman"],
+    requiresText: "For women",
+    cost: "Free workshops only; no device or data",
+    url: "https://www.shecodesfoundation.org/",
+    sources: [{ title: "SheCodes Foundation", url: "https://www.shecodesfoundation.org/" }],
+    checked: "Nov 2026"
   }
 ];

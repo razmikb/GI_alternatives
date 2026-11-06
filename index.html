@@ -25,6 +25,7 @@
         <a href="#programmes">All programmes</a>
         <a href="#templates">Message templates</a>
         <a href="#scams">Avoid scams</a>
+        <a href="#afghan-safety">Afghan students: safety</a>
         <a href="#about">About</a>
       </nav>
     </div>
@@ -36,12 +37,13 @@
       <form id="quiz">
         <div class="q">
           <label class="q-title" for="country">1. Where do you study?</label>
+          <p class="hint">If you study online, or want to, choose the country where you live.</p>
           <select id="country" name="country" required>
             <option value="">Choose a country…</option>
           </select>
         </div>
 
-        <fieldset class="q">
+        <fieldset class="q" id="intl-q">
           <legend class="q-title">2. Are you an international student?</legend>
           <p class="hint">That is, you are not a citizen or permanent resident of the country where you study.</p>
           <div class="choices">
@@ -52,7 +54,10 @@
 
         <fieldset class="q">
           <legend class="q-title">3. Does any of this apply to you? <span class="optional">(tick all that apply, or none)</span></legend>
+          <p class="hint">Your answers stay in your browser. They are not saved or sent anywhere.</p>
           <div class="choices stack">
+            <label class="choice" id="afghan-choice"><input type="checkbox" name="afghan"> I am from Afghanistan</label>
+            <label class="choice" id="woman-choice" hidden><input type="checkbox" name="woman"> I am a woman or girl <span class="optional">(many Afghan programmes are only for women and girls)</span></label>
             <label class="choice"><input type="checkbox" name="lowIncome"> I have a low income or receive government benefits in the country where I study</label>
             <label class="choice" id="pell-choice" hidden><input type="checkbox" name="pell"> I receive a US Pell Grant</label>
             <label class="choice"><input type="checkbox" name="refugee"> I am a refugee or seeking asylum</label>
@@ -84,9 +89,10 @@
         </label>
         <label>Type
           <select id="f-need">
-            <option value="">Laptop or internet</option>
+            <option value="">Any type</option>
             <option value="laptop">Laptop</option>
             <option value="internet">Internet</option>
+            <option value="study">Free study only (no device or data)</option>
           </select>
         </label>
         <label>Search
@@ -94,6 +100,7 @@
         </label>
         <label class="check"><input id="f-self" type="checkbox"> I can apply myself</label>
         <label class="check"><input id="f-intl" type="checkbox"> Not closed to international students</label>
+        <label class="check"><input id="f-afghan" type="checkbox"> For Afghan students</label>
       </div>
       <p id="f-count" class="muted small" aria-live="polite"></p>
       <div id="table"></div>
@@ -117,6 +124,32 @@
       </ul>
     </section>
 
+    <section id="afghan-safety" class="card warn">
+      <h2>Afghan students: safety and scams</h2>
+      <h3>Studying safely inside Afghanistan</h3>
+      <ul>
+        <li><strong>Keep your studies private.</strong> Use a separate email address for study, don't post your enrolment on social media, and delete sensitive chats you don't need. Choose programmes that don't publish students' names.</li>
+        <li><strong>Involve your family</strong> and get consent where it is required. A trusted family member can also help if your phone is checked.</li>
+        <li><strong>Do not buy or use Starlink.</strong> The Taliban say it is prohibited, devices have been seized, and people have been handed to the police.</li>
+        <li><strong>Plan for shutdowns.</strong> Download materials in advance, keep a mobile-data fallback, and tell your programme coordinator early if you lose access.</li>
+        <li><strong>Protect your documents.</strong> Share your Tazkira, passport, PoR or Amayesh card only on an official programme portal, never through WhatsApp or Telegram.</li>
+      </ul>
+      <h3>Scams aimed at Afghans</h3>
+      <ul>
+        <li><strong>UNHCR never charges for anything.</strong> Anyone asking for money for assistance does not represent UNHCR, and messages from private WhatsApp numbers or personal email addresses claiming to be UNHCR are scams. In Pakistan, report fraud to the UNHCR hotline 0800-86677.</li>
+        <li><strong>Fake visa and resettlement brokers.</strong> UNHCR is not affiliated with any agent or broker.</li>
+        <li><strong>"Scholarship-selling" companies.</strong> Apply only on the provider's own website. No real scholarship asks for money to guarantee a place or a visa.</li>
+        <li><strong>Fundraisers are not application programmes.</strong> Never send documents or fees to a crowdfunding page in the hope of being "selected".</li>
+      </ul>
+      <h3>A scholarship is not a visa</h3>
+      <ul>
+        <li>The US has issued no new student visas to Afghan nationals since 1 January 2026, with narrow exceptions.</li>
+        <li>Since 26 March 2026 the UK has refused Student visa applications made by Afghan nationals from outside the UK, so Chevening in Afghanistan is closed.</li>
+        <li>Canada refused a study permit to an Afghan student in November 2026 even though a full scholarship covered her costs.</li>
+        <li>Anyone "guaranteeing" a visa for a fee is lying.</li>
+      </ul>
+    </section>
+
     <section id="about">
       <h2>About this guide</h2>
       <h3>Why GiveInternet can't send you a laptop</h3>
@@ -127,6 +160,9 @@
         <li>Some sources disagree: some websites say a US Pell Grant qualifies you for Lifeline, but official and Congressional sources indicate it only does so for certain survivors; it does qualify you for PCs for People.</li>
         <li>Tamil Nadu's scheme was launched in January 2026 under one state government; check with your college whether distributions are continuing.</li>
         <li>Globetops' and Screen Share UK's current activity could not be confirmed.</li>
+        <li>Afghan programmes: we could not confirm open 2026/27 intakes for the small cohort programmes that provide devices. The Digital Citizen Fund degree and Online Zan University are known from press reports only.</li>
+        <li>University of the People is treated as tuition only: one third-party site claims it helps with internet and devices, but its own pages don't say so.</li>
+        <li>Resettled Afghans receiving SNAP or Medicaid should qualify for US Lifeline; this is our reading of the eligibility rules, not a programme statement.</li>
       </ul>
     </section>
   </main>
